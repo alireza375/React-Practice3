@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Bottle from "../Bottle/Bottle";
 import './Bottles.css'
 import { addToLS, getStoredCart } from "../../utilities/localstorase";
+import Cart from "../Cart/Cart";
 
 const Bottles = () => {
 
@@ -19,7 +20,17 @@ const Bottles = () => {
         console.log('called the useEffect', bottles.length)
         if(bottles.length>0) {
             const storeCart = getStoredCart();
-            console.log(storeCart);
+            console.log(storeCart, bottles);
+            const savedCart = [];
+            for(const id of storeCart){
+                console.log(id);
+                const bottle = bottles.find(bottle => bottle.id === id);
+                
+                if(bottle) {
+                    savedCart.push(bottle)
+                }
+            }
+            setCart(savedCart);
         }
 
     }, [bottles])
@@ -33,7 +44,7 @@ const Bottles = () => {
     return (
         <div>
             <h2>Available Bottles: {bottles.length}</h2>
-            <h4>Cart: {cart.length}</h4>
+            <Cart cart={cart} />
            <div className="bottles-contailer">
             {
                 bottles.map(bottle => <Bottle 
